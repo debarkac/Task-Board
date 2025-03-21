@@ -6,7 +6,31 @@
     cursor: grab;
     transition: all 0.2s ease;
     border-left: 4px solid transparent;
-  }
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    /* Remove max-height and overflow properties */
+}
+
+.task-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.task-card button {
+    cursor: pointer;
+    z-index: 2;
+}
+
+.task-description {
+    margin: 0.75rem 0;
+    font-size: 0.9rem;
+    color: #62757f;
+    line-height: 1.4;
+    /* If you want to limit long descriptions, use these properties */
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}
   
   .task-card:hover {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
@@ -93,12 +117,7 @@
     color: #345;
   }
   
-  .task-description {
-    margin: 0.75rem 0;
-    font-size: 0.9rem;
-    color: #62757f;
-    line-height: 1.4;
-  }
+  
   
   .task-meta {
     display: flex;
