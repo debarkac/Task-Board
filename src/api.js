@@ -1,61 +1,135 @@
 import { v4 as uuidv4 } from 'uuid';
 
-// Mock function to simulate API call for task generation
 export const generateTasksFromPrompt = async (prompt, options) => {
-  // In a real app, this would be an API call to a backend service
-  // that would use NLP or AI to interpret the prompt and create appropriate tasks
-  
-  // For demo purposes, we're creating mock tasks based on some simple rules
   return new Promise((resolve) => {
     setTimeout(() => {
-      // Simple keyword matching for demo purposes
+      // Instead of keyword matching, we'll now use a more sophisticated approach
+      // to divide the prompt into 2-5 distinct tasks
+      
       const tasks = [];
       const today = new Date();
       
-      if (prompt.toLowerCase().includes('login')) {
-        tasks.push({
-          id: uuidv4(),
-          title: 'Create login UI',
-          description: 'Design and implement the login user interface',
-          status: 'TODO',
-          dueDate: formatDate(addDays(today, 3)),
-          assignee: options.assignee || '',
-          category: options.category || 'Design'
-        });
-        
-        tasks.push({
-          id: uuidv4(),
-          title: 'Implement authentication logic',
-          description: 'Write backend code for user authentication',
-          status: 'TODO',
-          dueDate: formatDate(addDays(today, 5)),
-          assignee: options.assignee || '',
-          category: options.category || 'Feature'
-        });
-      }
+      // Simple analysis of the prompt to determine potential task breakdown
+      const promptLower = prompt.toLowerCase();
       
-      if (prompt.toLowerCase().includes('database')) {
-        tasks.push({
-          id: uuidv4(),
-          title: 'Design database schema',
-          description: 'Create schema for storing user data',
-          status: 'TODO',
-          dueDate: formatDate(addDays(today, 2)),
-          assignee: options.assignee || '',
-          category: options.category || 'Documentation'
-        });
-      }
-      
-      // Add a generic task if no specific keywords match or in addition to matched ones
-      tasks.push({
+      // Function to create a new task with proper defaults
+      const createTask = (title, description, category, daysToComplete) => ({
         id: uuidv4(),
-        title: prompt.length > 30 ? prompt.substring(0, 30) + '...' : prompt,
-        description: 'Task generated from prompt: ' + prompt,
+        title: title,
+        description: description,
         status: 'TODO',
-        dueDate: formatDate(addDays(today, 7)),
+        dueDate: formatDate(addDays(today, daysToComplete)),
         assignee: options.assignee || '',
-        category: options.category || ''
+        category: category || options.category || ''
       });
+      
+      // Analyze the prompt to identify potential components or phases
+      const containsDesign = promptLower.includes('design') || promptLower.includes('ui') || promptLower.includes('interface');
+      const containsDev = promptLower.includes('develop') || promptLower.includes('implement') || promptLower.includes('code');
+      const containsTest = promptLower.includes('test') || promptLower.includes('qa') || promptLower.includes('verify');
+      const containsData = promptLower.includes('data') || promptLower.includes('database') || promptLower.includes('storage');
+      const containsAPI = promptLower.includes('api') || promptLower.includes('endpoint') || promptLower.includes('service');
+      const containsDoc = promptLower.includes('document') || promptLower.includes('documentation') || promptLower.includes('manual');
+      
+      // Count potential task areas to ensure we create between 2-5 tasks
+      let taskAreas = [containsDesign, containsDev, containsTest, containsData, containsAPI, containsDoc].filter(Boolean).length;
+      
+      // If we identified less than 2 specific areas, default to a generic 2-task breakdown
+      if (taskAreas < 2) {
+        tasks.push(
+          createTask(
+            'Plan and Design: ' + prompt.substring(0, 40) + (prompt.length > 40 ? '...' : ''),
+            'Initial planning and design phase for: ' + prompt,
+            'Planning',
+            3
+          )
+        );
+        
+        tasks.push(
+          createTask(
+            'Implement: ' + prompt.substring(0, 40) + (prompt.length > 40 ? '...' : ''),
+            'Implementation phase for: ' + prompt,
+            'Development',
+            7
+          )
+        );
+      } else {
+        // Create specific tasks based on the identified areas (max 5)
+        let tasksAdded = 0;
+        const maxTasks = Math.min(5, taskAreas);
+        
+        if (containsDesign && tasksAdded < maxTasks) {
+          tasks.push(
+            createTask(
+              'Design UI/UX',
+              'Create mockups and design user interface for: ' + prompt,
+              'Design',
+              2
+            )
+          );
+          tasksAdded++;
+        }
+        
+        if (containsDev && tasksAdded < maxTasks) {
+          tasks.push(
+            createTask(
+              'Develop Core Functionality',
+              'Implement the core functionality required for: ' + prompt,
+              'Development',
+              4
+            )
+          );
+          tasksAdded++;
+        }
+        
+        if (containsData && tasksAdded < maxTasks) {
+          tasks.push(
+            createTask(
+              'Design Data Model',
+              'Create the data schema and storage solution for: ' + prompt,
+              'Database',
+              3
+            )
+          );
+          tasksAdded++;
+        }
+        
+        if (containsAPI && tasksAdded < maxTasks) {
+          tasks.push(
+            createTask(
+              'Develop API Endpoints',
+              'Create necessary API services and endpoints for: ' + prompt,
+              'API',
+              5
+            )
+          );
+          tasksAdded++;
+        }
+        
+        if (containsTest && tasksAdded < maxTasks) {
+          tasks.push(
+            createTask(
+              'Test Implementation',
+              'Write and execute test cases for: ' + prompt,
+              'QA',
+              6
+            )
+          );
+          tasksAdded++;
+        }
+        
+        if (containsDoc && tasksAdded < maxTasks) {
+          tasks.push(
+            createTask(
+              'Create Documentation',
+              'Document usage and implementation details for: ' + prompt,
+              'Documentation',
+              7
+            )
+          );
+          tasksAdded++;
+        }
+      }
       
       resolve(tasks);
     }, 1000); // Simulate API delay

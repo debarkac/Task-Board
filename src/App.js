@@ -6,7 +6,7 @@ import './App.css';
 
 function App() {
   const [tasks, setTasks] = useState([]);
-  const [users, setUsers] = useState(['John Doe', 'Jane Smith', 'Alex Johnson']);
+  const [users, setUsers] = useState(['Ayush Garg', 'Debarka Chakraborti', 'Ganapuram Bhoomika','Harika Srutakeerti','Katta Abhigna Reddy','Kemburu Poorna Sai Krishna','Naga Venkata Akshaya Juluri']);
   const [categories, setCategories] = useState(['Bug', 'Feature', 'Documentation', 'Design']);
   
   const handlePromptSubmit = async (prompt, options) => {

@@ -38,6 +38,8 @@ function TaskCard({ task, onEdit, onDelete, users, categories }) {
       className={`task-card ${isDragging ? 'task-dragging' : ''}`}
       ref={drag}
       style={{ opacity: isDragging ? 0.5 : 1 }}
+      data-category={task.category}
+      data-status={task.status}
     >
       {isEditing ? (
         <div className="task-edit-form">
@@ -79,7 +81,7 @@ function TaskCard({ task, onEdit, onDelete, users, categories }) {
       ) : (
         <>
           <div className="card-header">
-            <span className="task-category">{task.category}</span>
+            <span className="task-category">{task.category || 'Uncategorized'}</span>
             <div className="card-actions">
               <button onClick={handleEdit}>Edit</button>
               <button onClick={() => onDelete(task.id)}>Delete</button>
@@ -91,7 +93,7 @@ function TaskCard({ task, onEdit, onDelete, users, categories }) {
             <div className="due-date">Due: {task.dueDate}</div>
             <div className="assignee">Assigned to: {task.assignee || 'Unassigned'}</div>
           </div>
-          <div className="task-status">Status: {task.status}</div>
+          <div className="task-status">{task.status}</div>
         </>
       )}
     </div>
