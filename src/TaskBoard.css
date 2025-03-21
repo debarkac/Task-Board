@@ -1,0 +1,13 @@
+.task-board {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex: 1;
+    min-height: 500px;
+  }
+  
+  @media (min-width: 768px) {
+    .task-board {
+      flex-direction: row;
+    }
+  }
